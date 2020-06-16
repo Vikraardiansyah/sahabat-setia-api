@@ -1,10 +1,10 @@
 const connection = require('../config/mysql')
 
 module.exports = {
-    getAuthor: function(){
-        return new Promise(function(resolve, reject){
-            connection.query("SELECT * FROM author", function(error, result){
-                if(!error){
+    getAuthor: function () {
+        return new Promise(function (resolve, reject) {
+            connection.query("SELECT * FROM author ORDER BY author ASC", function (error, result) {
+                if (!error) {
                     resolve(result)
                 } else {
                     reject(new Error(error))
@@ -12,10 +12,10 @@ module.exports = {
             })
         })
     },
-    postAuthor: function(setData){
-        return new Promise(function(resolve, reject){
-            connection.query("INSERT INTO author SET ?", setData, function(error, result){
-                if(!error){
+    postAuthor: function (setData) {
+        return new Promise(function (resolve, reject) {
+            connection.query("INSERT INTO author SET ?", setData, function (error, result) {
+                if (!error) {
                     const newData = {
                         id: result.insertId,
                         ...setData
@@ -27,10 +27,10 @@ module.exports = {
             })
         })
     },
-    putAuthor: function(setData, id){
-        return new Promise(function(resolve, reject){
-            connection.query('UPDATE author SET ? WHERE id=?', [setData, id], function(error, result){
-                if(!error){
+    putAuthor: function (setData, id) {
+        return new Promise(function (resolve, reject) {
+            connection.query('UPDATE author SET ? WHERE id=?', [setData, id], function (error, result) {
+                if (!error) {
                     const newData = {
                         id: parseInt(id),
                         ...setData
@@ -42,10 +42,10 @@ module.exports = {
             })
         })
     },
-    deleteAuthor: function(id){
-        return new Promise(function(resolve, reject){
-            connection.query('DELETE FROM author WHERE id=?', id, function(error, result){
-                if(!error){
+    deleteAuthor: function (id) {
+        return new Promise(function (resolve, reject) {
+            connection.query('DELETE FROM author WHERE id=?', id, function (error, result) {
+                if (!error) {
                     const newData = {
                         id: parseInt(id)
                     }

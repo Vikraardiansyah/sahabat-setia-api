@@ -1,10 +1,10 @@
 const connection = require('../config/mysql')
 
 module.exports = {
-    getGenre: function(){
-        return new Promise(function(resolve, reject){
-            connection.query("SELECT * FROM genre", function(error, result){
-                if(!error){
+    getGenre: function () {
+        return new Promise(function (resolve, reject) {
+            connection.query("SELECT * FROM genre ORDER BY genre ASC", function (error, result) {
+                if (!error) {
                     resolve(result)
                 } else {
                     reject(new Error(error))
@@ -12,10 +12,10 @@ module.exports = {
             })
         })
     },
-    postGenre: function(setData){
-        return new Promise(function(resolve, reject){
-            connection.query("INSERT INTO genre SET ?", setData, function(error, result){
-                if(!error){
+    postGenre: function (setData) {
+        return new Promise(function (resolve, reject) {
+            connection.query("INSERT INTO genre SET ?", setData, function (error, result) {
+                if (!error) {
                     const newData = {
                         id: result.insertId,
                         ...setData
@@ -27,10 +27,10 @@ module.exports = {
             })
         })
     },
-    putGenre: function(setData, id){
-        return new Promise(function(resolve, reject){
-            connection.query('UPDATE genre SET ? WHERE id=?', [setData, id], function(error, result){
-                if(!error){
+    putGenre: function (setData, id) {
+        return new Promise(function (resolve, reject) {
+            connection.query('UPDATE genre SET ? WHERE id=?', [setData, id], function (error, result) {
+                if (!error) {
                     const newData = {
                         id: parseInt(id),
                         ...setData
@@ -42,10 +42,10 @@ module.exports = {
             })
         })
     },
-    deleteGenre: function(id){
-        return new Promise(function(resolve, reject){
-            connection.query('DELETE FROM genre WHERE id=?', id, function(error, result){
-                if(!error){
+    deleteGenre: function (id) {
+        return new Promise(function (resolve, reject) {
+            connection.query('DELETE FROM genre WHERE id=?', id, function (error, result) {
+                if (!error) {
                     const newData = {
                         id: parseInt(id)
                     }
