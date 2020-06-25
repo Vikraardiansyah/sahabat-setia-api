@@ -37,7 +37,8 @@ PORT=8080
 ## End Point
 **1. GET**
 * `/books`
-* `/books?search=harry&sort=true&page=1&limit=6`
+* `/books?value=title&sort=true&page=1&limit=6`
+* `/books?search=harry`
 * `/genre`
 * `/author`
 * `/status`
