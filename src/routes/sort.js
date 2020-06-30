@@ -1,10 +1,11 @@
-const express = require("express");
-const Route = express.Router();
+const express = require('express')
+const Route = express.Router()
 
-const { authentication } = require("../middleware/auth");
+const {authentication} = require('../middleware/auth')
 
-const sortController = require("../controllers/sort");
+const sortController = require('../controllers/sort')
 
-Route.get("/", authentication, sortController.sortBooks);
+Route
+    .get('/', authentication, sortController.sortBooks)
 
-module.exports = Route;
+module.exports = Route
