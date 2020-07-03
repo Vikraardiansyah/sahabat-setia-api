@@ -13,13 +13,13 @@ const multerFilter = (req, file, cb) => {
 
 const upload = multer({
   storage: multerStorage,
-  fileFilter: multerFilter
+  fileFilter: multerFilter,
 });
 
 const uploadFiles = upload.array("images", 1);
 
 const uploadImages = (req, res, next) => {
-  uploadFiles(req, res, err => {
+  uploadFiles(req, res, (err) => {
     if (err instanceof multer.MulterError) {
       if (err.code === "LIMIT_UNEXPECTED_FILE") {
         return res.send("Too many files to upload.");
@@ -37,7 +37,7 @@ const resizeImages = async (req, res, next) => {
 
   req.body.images = [];
   await Promise.all(
-    req.files.map(async file => {
+    req.files.map(async (file) => {
       const filename = file.originalname.replace(/\..+$/, "");
       const newFilename = `bezkoder-${filename}-${Date.now()}.jpeg`;
 
@@ -59,9 +59,7 @@ const getResult = async (req, res) => {
     return res.send(`You must select at least 1 image.`);
   }
 
-  const images = req.body.images
-    .map(image => "" + image + "")
-    .join("");
+  const images = req.body.images.map((image) => "" + image + "").join("");
 
   return res.send(`Images were uploaded:${images}`);
 };
@@ -69,5 +67,5 @@ const getResult = async (req, res) => {
 module.exports = {
   uploadImages: uploadImages,
   resizeImages: resizeImages,
-  getResult: getResult
+  getResult: getResult,
 };
