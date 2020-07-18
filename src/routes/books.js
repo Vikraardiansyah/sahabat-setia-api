@@ -2,10 +2,11 @@ const express = require("express");
 const Route = express.Router();
 const uploadImage = require("../helpers/uploadImage");
 const { authentication, authorization } = require("../middleware/auth");
+const { getBooksRedis, deleteRedis } = require("../middleware/redis");
 
 const bookController = require("../controllers/books");
 
-Route.get("/", bookController.getBooks)
+Route.get("/", getBooksRedis, bookController.getBooks)
   // .get('/:id', authentication, bookController.getBookById)
   .get("/recommended", bookController.getBookByRecommended)
   .post(
@@ -13,6 +14,7 @@ Route.get("/", bookController.getBooks)
     authentication,
     authorization,
     uploadImage,
+    deleteRedis,
     bookController.postBooks
   )
   .put(
@@ -20,8 +22,15 @@ Route.get("/", bookController.getBooks)
     authentication,
     authorization,
     uploadImage,
+    deleteRedis,
     bookController.putBooks
   )
-  .delete("/:id", authentication, authorization, bookController.deleteBooks);
+  .delete(
+    "/:id",
+    authentication,
+    authorization,
+    deleteRedis,
+    bookController.deleteBooks
+  );
 
 module.exports = Route;

@@ -1,5 +1,7 @@
 const bookModels = require("../models/books");
 const helper = require("../helpers");
+const redis = require("../config/redis");
+const qs = require("query-string");
 
 module.exports = {
   getBooks: async function (request, response) {
@@ -30,7 +32,7 @@ module.exports = {
       const next = parseInt(page + 1);
       const previous = parseInt(page - 1);
       const search = `%${request.query.search}%`;
-      const data = await bookModels.getCountBooks(search);
+      const count = await bookModels.getCountBooks(search);
       const result = await bookModels.getBooks(
         search,
         value,
@@ -38,7 +40,7 @@ module.exports = {
         start,
         limit
       );
-      const totalData = data[0]["COUNT(*)"];
+      const totalData = count[0]["COUNT(*)"];
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
         totalPage: totalPage,
@@ -48,7 +50,13 @@ module.exports = {
         next: next,
         previous: previous,
       };
-
+      const key = qs.stringify({ search, value, sort, start, limit });
+      const redisData = {
+        result,
+        pagination,
+      };
+      const data = JSON.stringify(redisData);
+      redis.setex(key, 60, data);
       return helper.response(response, 200, result, pagination);
     } catch (error) {
       return helper.response(response, 500, error);
@@ -141,7 +149,6 @@ module.exports = {
   deleteBooks: async function (request, response) {
     try {
       const id = request.params.id;
-      console.log(request.body);
       const result = await bookModels.deleteBooks(id);
 
       return helper.response(response, 200, result);

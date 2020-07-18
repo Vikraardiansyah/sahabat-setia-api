@@ -83,7 +83,7 @@ module.exports = {
         function (error, result) {
           if (!error) {
             const newData = {
-              id: id,
+              id,
               ...newSetData,
             };
             resolve(newData);
@@ -101,7 +101,10 @@ module.exports = {
         result
       ) {
         if (!error) {
-          resolve(result);
+          const newData = {
+            id,
+          };
+          resolve(newData);
         } else {
           reject(new Error(error));
         }
